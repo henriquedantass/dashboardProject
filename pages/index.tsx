@@ -1,4 +1,4 @@
-import {Flex, Button, Stack , FormLabel, FormControl} from '@chakra-ui/react'
+import {Flex, Button, Stack } from '@chakra-ui/react'
 import {Input} from '../src/components/form/input'
 
 export default function Home() {
@@ -23,9 +23,7 @@ export default function Home() {
           <Input name='password' type="password" label='Password'/>
         </Stack>
         <Button type='submit' mt='4' size='lg' colorScheme='pink'>Entrar</Button>
-
       </Flex>
-      
     </Flex>
   )
 }
