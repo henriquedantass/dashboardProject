@@ -3,7 +3,7 @@ import { RiAddLine, RiPencilLine } from "react-icons/ri";
 import { Header } from "../../src/components/Header";
 import { Pagination } from "../../src/components/Pagination/Index"
 import { Sidebar } from "../../src/components/Sidebar";
-
+import Link from 'next/link'
 export default function UserList(){
   const isWideSize = useBreakpointValue({
     base:false,
@@ -33,6 +33,7 @@ export default function UserList(){
             >
               Usuários
             </Heading>
+            <Link href="/users/create" passHref>
             <Button 
             size='sm'
             fontSize='sm'
@@ -42,6 +43,7 @@ export default function UserList(){
             >
               Criar novo
             </Button>
+            </Link>
           </Flex>
           <Table>
             <Thead>

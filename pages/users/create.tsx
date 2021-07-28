@@ -3,7 +3,7 @@ import React from "react";
 import { Input } from "../../src/components/Form/input";
 import { Header } from "../../src/components/Header";
 import { Sidebar } from "../../src/components/Sidebar";
-
+import Link from 'next/link'
 export default function CreateUser(){
   return (
     <Box>
@@ -30,7 +30,9 @@ export default function CreateUser(){
           </VStack>
           <Flex mt='8' justify='flex-end'> 
                   <HStack spacing='4'>
-                    <Button colorScheme='whiteAlpha'>Cancelar</Button>
+                    <Link href='/users' passHref>
+                      <Button colorScheme='whiteAlpha'>Cancelar</Button>
+                    </Link>
                     <Button colorScheme='pink'>Criar</Button>
                   </HStack>
               </Flex>
