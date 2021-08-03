@@ -4,12 +4,22 @@ import { Header } from "../../src/components/Header";
 import { Pagination } from "../../src/components/Pagination/Index"
 import { Sidebar } from "../../src/components/Sidebar";
 import Link from 'next/link'
+import { useEffect } from "react";
+
+
 export default function UserList(){
   const isWideSize = useBreakpointValue({
     base:false,
     lg: true,
   })
 
+
+  useEffect(() => {
+    fetch('http://localhost:3001/api/users').
+    then(response => response.json()).
+    then(data => console.log(data))
+    
+  },[])
 
   return (
     <Box>
