@@ -10,8 +10,6 @@ import { queryClient } from "../../src/services/queryClient";
 import { api } from "../../src/services/api";
 
 
-
-
 export default function UserList(){
   const [page, setPage] = useState(1);
   const {data, isLoading, isFetching ,error , refetch} = useUsers(page)
