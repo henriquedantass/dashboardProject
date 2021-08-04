@@ -3,35 +3,14 @@ import { RiAddLine, RiPencilLine, RiRefreshLine } from "react-icons/ri";
 import { Header } from "../../src/components/Header";
 import { Pagination } from "../../src/components/Pagination/Index"
 import { Sidebar } from "../../src/components/Sidebar";
-import { useQuery } from 'react-query'
 import Link from 'next/link'
-import { api } from "../../src/services/api";
+import { useUsers } from "../../src/services/hooks/useUsers";
 
 
 
 
 export default function UserList(){
-  const {data, isLoading, isFetching ,error , refetch} = useQuery('users' , async () => {
-    
-    const { data } = await api.get('http://localhost:3001/api/users');
-
-    const users = data.users.map( user => {
-      return {
-        id: user.id,
-        name: user.name,
-        email: user.email,
-        createdAt: new Date(user.createdAt).toLocaleDateString('pt-br' , {
-          day: '2-digit',
-          month: 'long',
-          year: 'numeric',
-        })
-      }
-    })
-
-    return users
-  }, {
-    staleTime: 1000 * 5 , // 5 seconds
-  })
+  const {data, isLoading, isFetching ,error , refetch} = useUsers()
 
   const isWideSize = useBreakpointValue({
     base:false,
