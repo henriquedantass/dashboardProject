@@ -5,14 +5,15 @@ import { Pagination } from "../../src/components/Pagination/Index"
 import { Sidebar } from "../../src/components/Sidebar";
 import { useQuery } from 'react-query'
 import Link from 'next/link'
+import { api } from "../../src/services/api";
 
 
 
 
 export default function UserList(){
   const {data, isLoading, isFetching ,error , refetch} = useQuery('users' , async () => {
-    const response = await fetch('http://localhost:3001/api/users');
-    const data = await response.json();
+    
+    const { data } = await api.get('http://localhost:3001/api/users');
 
     const users = data.users.map( user => {
       return {
