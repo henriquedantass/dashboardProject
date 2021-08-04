@@ -1,4 +1,4 @@
-import { Box, Flex, Heading, Divider, VStack, SimpleGrid, HStack, Button } from "@chakra-ui/react";
+import { Box, Flex, Heading, Divider, VStack, SimpleGrid, HStack, Button, useToast } from "@chakra-ui/react";
 import React from "react";
 import { useForm , SubmitHandler} from 'react-hook-form'
 import * as yup from 'yup';
@@ -34,7 +34,7 @@ const createUserFormSchema = yup.object().shape({
 
 export default function CreateUser(){
   const router = useRouter()
-
+  const toast = useToast()
   const createUser = useMutation(async (user:CreateUserFormData) => {
     const response = await api.post('users', {
       user: {
@@ -56,6 +56,13 @@ export default function CreateUser(){
 
   const handleCreateUser: SubmitHandler<CreateUserFormData> =  async (values) => {
     await createUser.mutateAsync(values)
+    await toast({
+          title: "Usuário criado com sucesso!",
+          status: "success",
+          position: 'top-right',
+          duration: 7000,
+          isClosable: true,
+    })
 
     router.push('/users')
   }
