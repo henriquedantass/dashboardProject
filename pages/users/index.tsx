@@ -5,26 +5,35 @@ import { Pagination } from "../../src/components/Pagination/Index"
 import { Sidebar } from "../../src/components/Sidebar";
 import { useQuery } from 'react-query'
 import Link from 'next/link'
-import { useEffect } from "react";
+
+
 
 
 export default function UserList(){
   const {data, isLoading, error} = useQuery('users' , async () => {
     const response = await fetch('http://localhost:3001/api/users');
-    const data = response.json();
-    return data
+    const data = await response.json();
+
+    const users = data.users.map( user => {
+      return {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        createdAt: new Date(user.createdAt).toLocaleDateString('pt-br' , {
+          day: '2-digit',
+          month: 'long',
+          year: 'numeric',
+        })
+      }
+    })
+
+    return users
   })
-
-
 
   const isWideSize = useBreakpointValue({
     base:false,
     lg: true,
   })
-
-
-
-
 
   return (
     <Box>
@@ -82,29 +91,34 @@ export default function UserList(){
               </Tr>
             </Thead>
             <Tbody>
-              <Tr>
-                <Td px={['4','4','6']}>
-                  <Checkbox colorScheme='pink'/>
-                </Td>
-                <Td>
-                  <Box>
-                    <Text fontWeight='bold'>Henrique Dantas</Text>
-                    <Text fontSize='small' color='gray.300'>henrique@hotmail.ph</Text>
-                  </Box>
-                </Td>
-                { isWideSize && <Td>04 de abr de 2020</Td>}
-                { isWideSize && (<Td>
-                <Button 
-                  size='sm'
-                  fontSize='sm'
-                  leftIcon={<Icon as={RiPencilLine} fontSize='16px'/>}
-                  colorScheme='purple'
-                  as="a"
-                  >
-                    Editar
-                  </Button>
-                </Td>)}
-              </Tr>
+              {data.map(user => {
+                return (
+                  <Tr key = {user.id}>
+                    <Td px={['4','4','6']}>
+                      <Checkbox colorScheme='pink'/>
+                    </Td>
+                    <Td>
+                      <Box>
+                        <Text fontWeight='bold'>{user.name}</Text>
+                        <Text fontSize='small' color='gray.300'>{user.email}</Text>
+                      </Box>
+                    </Td>
+                    { isWideSize && <Td>{user.createdAt}</Td>}
+                    { isWideSize && (<Td>
+                    <Button 
+                      size='sm'
+                      fontSize='sm'
+                      leftIcon={<Icon as={RiPencilLine} fontSize='16px'/>}
+                      colorScheme='purple'
+                      as="a"
+                      >
+                        Editar
+                      </Button>
+                    </Td>
+                    )}
+                </Tr>
+                )
+              })}
             </Tbody>
           </Table>
             <Pagination/>
