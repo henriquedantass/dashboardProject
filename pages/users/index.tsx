@@ -5,12 +5,17 @@ import { Pagination } from "../../src/components/Pagination/Index"
 import { Sidebar } from "../../src/components/Sidebar";
 import Link from 'next/link'
 import { useUsers } from "../../src/services/hooks/useUsers";
+import { useState } from "react";
 
 
 
 
 export default function UserList(){
+  const [page, setPage] = useState(1);
   const {data, isLoading, isFetching ,error , refetch} = useUsers()
+
+
+  console.log(page)
 
   const isWideSize = useBreakpointValue({
     base:false,
@@ -121,7 +126,7 @@ export default function UserList(){
             <Pagination 
               totalCountOfRegisters={200}
               currentPage={5}
-              onPageChange={() => {}}
+              onPageChange={setPage}
             />
             </>
           )}
