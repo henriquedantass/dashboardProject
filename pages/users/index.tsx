@@ -10,7 +10,7 @@ import Link from 'next/link'
 
 
 export default function UserList(){
-  const {data, isLoading, error} = useQuery('users' , async () => {
+  const {data, isLoading, isFetching ,error} = useQuery('users' , async () => {
     const response = await fetch('http://localhost:3001/api/users');
     const data = await response.json();
 
@@ -58,6 +58,9 @@ export default function UserList(){
             size='lg'
             >
               Usuários
+            {!isLoading && isFetching && 
+            <Spinner size='sm' ml='4' color='gray.500'/>
+            }
             </Heading>
             <Link href="/users/create" passHref>
             <Button 
