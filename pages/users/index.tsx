@@ -1,25 +1,30 @@
-import { Box, Button, Checkbox, Flex, Heading, Icon, Table, Tbody, Td, Th, Thead, Tr, Text, useBreakpointValue } from "@chakra-ui/react";
+import { Spinner , Box, Button, Checkbox, Flex, Heading, Icon, Table, Tbody, Td, Th, Thead, Tr, Text, useBreakpointValue } from "@chakra-ui/react";
 import { RiAddLine, RiPencilLine } from "react-icons/ri";
 import { Header } from "../../src/components/Header";
 import { Pagination } from "../../src/components/Pagination/Index"
 import { Sidebar } from "../../src/components/Sidebar";
+import { useQuery } from 'react-query'
 import Link from 'next/link'
 import { useEffect } from "react";
 
 
 export default function UserList(){
+  const {data, isLoading, error} = useQuery('users' , async () => {
+    const response = await fetch('http://localhost:3001/api/users');
+    const data = response.json();
+    return data
+  })
+
+
+
   const isWideSize = useBreakpointValue({
     base:false,
     lg: true,
   })
 
 
-  useEffect(() => {
-    fetch('http://localhost:3001/api/users').
-    then(response => response.json()).
-    then(data => console.log(data))
-    
-  },[])
+
+
 
   return (
     <Box>
@@ -55,7 +60,17 @@ export default function UserList(){
             </Button>
             </Link>
           </Flex>
-          <Table>
+          {isLoading ? (
+            <Flex justify='center'>
+              <Spinner/>
+            </Flex>
+          ) : error ? (
+            <Flex justify='center'>
+              <Text>Occoreu um error ao buscar os usuários</Text>
+            </Flex>
+          ) : (
+            <>
+            <Table>
             <Thead>
               <Tr>
                 <Th px={['4','4','6']} color='gray.300' width='8'>
@@ -92,7 +107,9 @@ export default function UserList(){
               </Tr>
             </Tbody>
           </Table>
-          <Pagination/>
+            <Pagination/>
+            </>
+          )}
         </Box>
 
       </Flex>
