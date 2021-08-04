@@ -1,5 +1,5 @@
-import { Spinner , Box, Button, Checkbox, Flex, Heading, Icon, Table, Tbody, Td, Th, Thead, Tr, Text, useBreakpointValue } from "@chakra-ui/react";
-import { RiAddLine, RiPencilLine } from "react-icons/ri";
+import { Spinner , Box, Button, Checkbox, Flex, Heading, Icon, Table, Tbody, Td, Th, Thead, Tr, Text, useBreakpointValue, HStack } from "@chakra-ui/react";
+import { RiAddLine, RiPencilLine, RiRefreshLine } from "react-icons/ri";
 import { Header } from "../../src/components/Header";
 import { Pagination } from "../../src/components/Pagination/Index"
 import { Sidebar } from "../../src/components/Sidebar";
@@ -10,7 +10,7 @@ import Link from 'next/link'
 
 
 export default function UserList(){
-  const {data, isLoading, isFetching ,error} = useQuery('users' , async () => {
+  const {data, isLoading, isFetching ,error , refetch} = useQuery('users' , async () => {
     const response = await fetch('http://localhost:3001/api/users');
     const data = await response.json();
 
@@ -62,6 +62,16 @@ export default function UserList(){
             <Spinner size='sm' ml='4' color='gray.500'/>
             }
             </Heading>
+            <HStack spacing='10px'>
+            <Button 
+              size='sm'
+              fontSize='sm'
+              leftIcon={<Icon as={RiRefreshLine} fontSize='20px'/>}
+              colorScheme='pink'
+              onClick={() => {refetch()}}
+            >
+              Atualizar
+            </Button>
             <Link href="/users/create" passHref>
             <Button 
             size='sm'
@@ -73,6 +83,8 @@ export default function UserList(){
               Criar novo
             </Button>
             </Link>
+
+            </HStack>
           </Flex>
           {isLoading ? (
             <Flex justify='center'>
