@@ -1,11 +1,13 @@
-import { Spinner , Box, Button, Checkbox, Flex, Heading, Icon, Table, Tbody, Td, Th, Thead, Tr, Text, useBreakpointValue, HStack } from "@chakra-ui/react";
+import { Spinner , Box, Button, Checkbox, Flex, Heading, Icon, Table, Tbody, Td, Th, Thead, Tr, Text, useBreakpointValue, HStack, Link } from "@chakra-ui/react";
 import { RiAddLine, RiPencilLine, RiRefreshLine } from "react-icons/ri";
 import { Header } from "../../src/components/Header";
 import { Pagination } from "../../src/components/Pagination/Index"
 import { Sidebar } from "../../src/components/Sidebar";
-import Link from 'next/link'
+import NextLink from 'next/link'
 import { useUsers } from "../../src/services/hooks/useUsers";
 import { useState } from "react";
+import { queryClient } from "../../src/services/queryClient";
+import { api } from "../../src/services/api";
 
 
 
@@ -13,6 +15,17 @@ import { useState } from "react";
 export default function UserList(){
   const [page, setPage] = useState(1);
   const {data, isLoading, isFetching ,error , refetch} = useUsers(page)
+
+
+  async function handlePrefetchUser (userId: string){
+    await queryClient.prefetchQuery(['user', userId] , async() => {
+      const response = await api.get(`users/${userId}`)
+
+      return response.data
+    }, {
+      staleTime: 1000 * 60 * 10
+    })
+  }
 
 
   const isWideSize = useBreakpointValue({
@@ -55,17 +68,17 @@ export default function UserList(){
             >
               Atualizar
             </Button>
-            <Link href="/users/create" passHref>
-            <Button 
-            size='sm'
-            fontSize='sm'
-            leftIcon={<Icon as={RiAddLine} fontSize='20px'/>}
-            colorScheme='pink'
-            as="a"
-            >
-              Criar novo
-            </Button>
-            </Link>
+            <NextLink href="/users/create" passHref>
+              <Button 
+              size='sm'
+              fontSize='sm'
+              leftIcon={<Icon as={RiAddLine} fontSize='20px'/>}
+              colorScheme='pink'
+              as="a"
+              >
+                Criar novo
+              </Button>
+            </NextLink>
 
             </HStack>
           </Flex>
@@ -99,7 +112,12 @@ export default function UserList(){
                     </Td>
                     <Td>
                       <Box>
-                        <Text fontWeight='bold'>{user.name}</Text>
+                        <Link 
+                          color='purple.400' 
+                          onMouseEnter={() => handlePrefetchUser(user.id) }
+                        >
+                          <Text fontWeight='bold'>{user.name}</Text>
+                        </Link>
                         <Text fontSize='small' color='gray.300'>{user.email}</Text>
                       </Box>
                     </Td>
